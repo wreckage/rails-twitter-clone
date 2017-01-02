@@ -7,10 +7,16 @@ class SessionsController < ApplicationController
       # using 'assigns(:user)' and that @user is available in views
       @user = User.find_by(email: params[:session][:email].downcase)
       if @user && @user.authenticate(params[:session][:password])
-          log_in @user
-          # remember user only if they check the box when logging in
-          params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-          redirect_back_or @user
+          if @user.activated?
+              log_in @user
+              # remember user only if they check the box when logging in
+              params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
+              redirect_back_or @user
+          else
+              message = "Account not activated. Check your email for the activation link."
+              flash[:warning] = message
+              redirect_to root_url
+          end
       else
           flash.now[:danger] = 'Invalid email/password'
           render 'new'
