@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+    has_many :microposts, dependent: :destroy
     # virtual attribute w/ both getter & setter
     attr_accessor :remember_token, :activation_token, :reset_token
     before_save :downcase_email
@@ -71,6 +72,12 @@ class User < ApplicationRecord
     # http://stackoverflow.com/a/20738162
     def password_reset_expired?
         reset_sent_at < 2.hours.ago
+    end
+
+    # Defines a proto-feed
+    def feed
+        Micropost.where("user_id = ?", id)
+        # microposts
     end
 
     private
