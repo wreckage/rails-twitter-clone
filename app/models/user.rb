@@ -84,7 +84,7 @@ class User < ApplicationRecord
         reset_sent_at < 2.hours.ago
     end
 
-    # Defines a proto-feed
+    # Defines a feed
     def feed
         # the following SQL makes use of a subselect in order to keep
         # from putting all of the following_ids into a Ruby array in memory
