@@ -1,0 +1,16 @@
+one:
+  follower: john
+  followed: lana
+
+two:
+  follower: john
+  followed: malory
+
+three:
+  follower: lana
+  followed: john
+
+four:
+  follower: abigail
+  followed: john
+

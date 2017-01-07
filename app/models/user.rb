@@ -1,5 +1,15 @@
 class User < ApplicationRecord
     has_many :microposts, dependent: :destroy
+    has_many :active_relationships, 
+        class_name: "Relationship", 
+        foreign_key: "follower_id", 
+        dependent: :destroy
+    has_many :passive_relationships, 
+        class_name: "Relationship", 
+        foreign_key: "followed_id", 
+        dependent: :destroy
+    has_many :following, through: :active_relationships, source: :followed
+    has_many :followers, through: :passive_relationships, source: :follower
     # virtual attribute w/ both getter & setter
     attr_accessor :remember_token, :activation_token, :reset_token
     before_save :downcase_email
@@ -76,8 +86,33 @@ class User < ApplicationRecord
 
     # Defines a proto-feed
     def feed
-        Micropost.where("user_id = ?", id)
+        # the following SQL makes use of a subselect in order to keep
+        # from putting all of the following_ids into a Ruby array in memory
+        # "...involves pushing the finding of followed user ids into 
+        # the database using a subselect"
+        following_ids = "SELECT followed_id FROM relationships 
+                         WHERE follower_id = :user_id"
+        Micropost.where("user_id IN (#{following_ids}) 
+                         OR user_id = :user_id", user_id: id)
+        # this is the old, less efficient implementation:
+        # Micropost.where("user_id IN (?) OR user_id = ?", following_ids, id)
+        # the following displays all of the current users microposts:
         # microposts
+    end
+
+    # Follows a user.
+    def follow(other_user)
+        following.push(other_user)
+    end
+
+    # Unfollows a user.
+    def unfollow(other_user)
+        following.delete(other_user)
+    end
+
+    # Returns true if the current user is following the other user
+    def following?(other_user)
+        following.include?(other_user)
     end
 
     private

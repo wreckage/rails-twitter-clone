@@ -87,4 +87,37 @@ class UserTest < ActiveSupport::TestCase
             @user.destroy
         end
     end
+
+    test "should follow and unfollower a user" do
+        john = users(:john)
+        abby = users(:abigail)
+        assert_not john.following?(abby)
+        john.follow(abby)
+        assert john.following?(abby)
+        assert abby.followers.include?(john)
+        john.unfollow(abby)
+        assert_not john.following?(abby)
+    end
+
+    test "feed should have the right posts" do
+        john = users(:john)
+        abigail = users(:abigail)
+        lana = users(:lana)
+        # forgot to give lana microposts, so added the following assertion
+        [john, abigail, lana].each do |user|
+            assert_not user.microposts.empty?
+        end
+        # Posts from followed user
+        lana.microposts.each do |post_following|
+            assert john.feed.include?(post_following)
+        end
+        # Posts from self
+        john.microposts.each do |post_self|
+            assert john.feed.include?(post_self)
+        end
+        # Posts from unfollowed user
+        abigail.microposts.each do |post_unfollowed|
+            assert_not john.feed.include?(post_unfollowed)
+        end
+    end
 end
