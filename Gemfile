@@ -21,6 +21,8 @@ gem 'jbuilder',                '2.4.1'
 group :development, :test do
     gem 'sqlite3', '1.3.12'
     gem 'byebug',  '9.0.0', platform: :mri
+    gem 'rspec-rails'
+    gem 'factory_girl_rails'
 end
 
 group :development do
@@ -35,6 +37,9 @@ group :test do
     gem 'minitest-reporters',       '1.1.9'
     gem 'guard',                    '2.13.0'
     gem 'guard-minitest',           '2.4.4'
+    gem 'capybara'
+    gem 'guard-rspec'
+    gem 'launchy'
 end
 
 group :production do
