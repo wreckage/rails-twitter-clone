@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
               log_in @user
               # remember user only if they check the box when logging in
               params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-              redirect_back_or @user
+              redirect_back_or root_url
           else
               message = "Account not activated. Check your email for the activation link."
               flash[:warning] = message
