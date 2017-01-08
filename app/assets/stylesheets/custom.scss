@@ -32,6 +32,15 @@ textarea {
   }
 }
 
+/* Sticky footer styles */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
 
 /* typography */
 
@@ -80,10 +89,12 @@ p {
 
 
 /* footer */
+/* Added sticky footer */
 
-footer {
-  margin-top: 45px;
-  padding-top: 5px;
+.footer {
+  position: absolute;
+  bottom: 0;
+  /* Set the fixed height of the footer here */
   border-top: 1px solid $gray-medium-light;
   color: $gray-light;
   a {
