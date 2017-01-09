@@ -1,9 +1,9 @@
 require 'faker'
 
 FactoryGirl.define do
-  factory :user2, class: User do
-    name "abigail"
-    email "abby2@example.com"
+  factory :user, class: User do
+    name { Faker::Name.first_name }
+    email { Faker::Internet.email }
     password_digest User.digest('password')
     activated true
     activated_at Time.zone.now
@@ -14,48 +14,20 @@ FactoryGirl.define do
         create_list(:micropost, evaluator.microposts_count, user: user)
     end
 
-    factory :user do
-      name "john"
-      email "johndoe@example.com"
+    factory :admin do
       admin true
-    end
-
-    factory :user3 do
-      name "lana"
-      email "lana2@example.com"
+      # after(:create) do |user|
+      #     5.times { create(:micropost, user: user) }
+      # end
     end
   end
 
+  # note the block passed to content; this is so that the value gets
+  # reevaluated each time an instance is created, which gives us
+  # random content each time
   factory :micropost do
     user
-    content Faker::Lorem.sentence(5)
+    content { Faker::Lorem.sentence(5) }
     created_at 42.days.ago
   end
-
 end
-
-FactoryGirl.define do
-  factory :relationship1, class: Relationship do
-      user
-      follower :user
-      followed :user2
-  end
-end
-
-
-# FactoryGirl.define do
-#   factory :user do |f|
-#     f.name "John"
-#     f.email "johndoe@example.com"
-#     f.password "foobar"
-#     f.password_confirmation "foobar"
-#   end
-# end
-
-# FactoryGirl.define do
-#   factory :contact do |f|
-#     f.firstname { Faker::Name.first_name }
-#     f.lastname { Faker::Name.last_name }
-#     f.password { Faker::Internet.password }
-#   end
-# end
