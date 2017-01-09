@@ -73,6 +73,11 @@ describe User do
         expect(@user.authenticated?(:remember, '')).to be false
     end
 
+    it "destroys associated microposts when it itself is destroyed" do
+        user = FactoryGirl.create(:user2, microposts_count: 1)
+        expect { user.destroy }.to change { Micropost.count }.by(-1)
+    end
+
     it "follows and unfollowers another user" do
         user2 = FactoryGirl.create(:user2)
         expect(@user.following?(user2)).to be false
@@ -82,4 +87,19 @@ describe User do
         @user.unfollow(user2)
         expect(@user.following?(user2)).to be false
     end
+
+#    it "has a feed with the correct posts" do
+#        john = @user
+#        abigail = FactoryGirl.create(:user2)
+#        lana = FactoryGirl.create(:user3)
+#        FactoryGirl.create(:relationship1)
+#        [john, abigail, lana].each do |user|
+#            expect(user.microposts).to_not be_empty
+#        end
+#        expect(john.following?(lana)).to be true
+#        # Posts from followed user
+#        #lana.microposts.each do |post_following|
+#        #    expect(john.feed).to include(post_following)
+#        #end
+#    end
 end
