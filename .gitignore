@@ -22,3 +22,6 @@
 
 # Ignore uploaded test images.
 /public/uploads
+
+# Ignore simplecov test coverage results
+coverage
