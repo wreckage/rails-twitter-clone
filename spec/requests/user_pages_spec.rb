@@ -5,9 +5,20 @@ describe "User pages" do
     subject { page }
 
     describe "profile page" do
-        let(:user) { FactoryGirl.create(:user) }
+        let(:user) { FactoryGirl.create(:user_with_microposts, microposts_count: 5) }
         before { visit user_path(user) }
         it { is_expected.to have_selector('h1', text: user.name) }
+
+        describe "of a signed in user with microposts" do
+            before { log_in user }
+            it {is_expected.to have_selector('a', text: /delete/i, count: 5) }
+            it "displays all of the user's microposts" do
+                user.microposts.each do |mpost|
+                    expect(page).to have_link(href: micropost_path(mpost.id))
+                end
+            end
+
+        end
     end
 
     describe "signup page" do
