@@ -10,7 +10,6 @@ describe "User pages" do
         it { is_expected.to have_selector('h1', text: user.name) }
     end
 
-
     describe "signup page" do
         before { visit signup_path }
         it { is_expected.to have_selector('h1', text: 'Sign up') }

@@ -6,21 +6,11 @@ describe User do
 
     subject { @user }
 
-    it { is_expected.to respond_to(:name) }
-    it { is_expected.to respond_to(:email) }
-    it { is_expected.to respond_to(:password_digest) }
-    it { is_expected.to respond_to(:password) }
-    it { is_expected.to respond_to(:password_confirmation) }
-    it { is_expected.to respond_to(:authenticate) }
-    it { is_expected.to respond_to(:feed) }
-    it { is_expected.to respond_to(:active_relationships) }
-    it { is_expected.to respond_to(:passive_relationships) }
-    it { is_expected.to respond_to(:followers) }
-    it { is_expected.to respond_to(:following) }
-    it { is_expected.to respond_to(:follow) }
-    it { is_expected.to respond_to(:unfollow) }
-    it { is_expected.to respond_to(:following?) }
-    it { is_expected.to be_valid }
+    [:name, :email, :password_digest, :password, :password_confirmation,
+     :authenticate, :feed, :active_relationships, :passive_relationships,
+     :followers, :following, :follow, :unfollow, :following?].each do |sym|
+        it { is_expected.to respond_to(sym) }
+     end
 
     describe "when name is not present" do
         before { @user.name = " " }
@@ -93,7 +83,7 @@ describe User do
     end
 
     it "destroys associated microposts when it itself is destroyed" do
-        user = FactoryGirl.create(:user, microposts_count: 1)
+        user = FactoryGirl.create(:user_with_microposts, microposts_count: 1)
         expect { user.destroy }.to change { Micropost.count }.by(-1)
     end
 
@@ -108,9 +98,9 @@ describe User do
     end
 
     describe "feed" do
-        let(:john) { @user }
-        let(:abigail) { FactoryGirl.create(:user) }
-        let(:lana) { FactoryGirl.create(:user) }
+        [:john, :abigail, :lana].each do |user|
+            let(user) { FactoryGirl.create(:user_with_microposts) }
+        end
 
         it "shows the posts of following users" do
             john.follow(lana)

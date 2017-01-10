@@ -8,6 +8,30 @@ describe "Static pages" do
         before { visit root_path }
         it { is_expected.to have_content('Sample App') }
         it { is_expected.to have_title("Ruby on Rails Tutorial Sample App") }
+
+        describe "for signed in users" do
+            let(:user) { FactoryGirl.create(:user_with_microposts) }
+            before do
+                log_in user
+                visit root_path
+            end
+
+            it "renders the user's feed" do
+                user.feed.each { |item| expect(page).to have_content item.content }
+            end
+
+            describe "follower/following counts" do
+                let(:other_user) { FactoryGirl.create(:user) }
+                before do
+                  other_user.follow(user)
+                  visit root_path
+                end
+
+                it { is_expected.to have_link("0 following", href: following_user_path(user)) }
+                it { is_expected.to have_link("1 followers", href: followers_user_path(user)) }
+            end
+
+        end
     end
 
     describe "About page" do

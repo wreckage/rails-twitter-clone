@@ -10,8 +10,11 @@ FactoryGirl.define do
     transient do
         microposts_count 5
     end
-    after(:create) do |user, evaluator|
-        create_list(:micropost, evaluator.microposts_count, user: user)
+
+    factory :user_with_microposts do
+        after(:create) do |user, evaluator|
+            create_list(:micropost, evaluator.microposts_count, user: user)
+        end
     end
 
     factory :admin do

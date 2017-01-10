@@ -4,7 +4,7 @@ describe "Authentication" do
 
   subject { page }
 
-  describe "signin page" do
+  describe "log in page" do
     before { visit login_path }
 
     it { is_expected.to have_selector('h1', text: 'Log in') }
@@ -31,6 +31,10 @@ describe "Authentication" do
       it { is_expected.to have_link('Log out', href: logout_path) }
       it { is_expected.not_to have_link('Log in', href: login_path) }
     end
-
   end
+
+  #describe "authorization" do
+  #    describe "for non-signed-in users" do
+  #    end
+  #end
 end
