@@ -9,12 +9,20 @@ describe "Static pages" do
         it { is_expected.to have_content('Sample App') }
         it { is_expected.to have_title("Ruby on Rails Tutorial Sample App") }
 
+        describe "for users not signed in" do
+            it { is_expected.to have_link(text: /Log in/i, href: login_path) }
+            it { is_expected.to have_link(text: /Home/i, href: root_path) }
+            it { is_expected.to have_link(text: /Help/i, href: help_path) }
+        end
+
         describe "for signed in users" do
             let(:user) { FactoryGirl.create(:user_with_microposts) }
             before do
                 log_in user
                 visit root_path
             end
+
+            it { is_expected.to have_link(text: /Log out/i, href: logout_path) }
 
             it "renders the user's feed" do
                 user.feed.each { |item| expect(page).to have_content item.content }

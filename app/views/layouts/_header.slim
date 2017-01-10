@@ -1,0 +1,27 @@
+div class="navbar navbar-fixed-top navbar-inverse"
+  meta name="viewport" content="width=device-width initial-scale=1 maximum-scale=1"
+  .container
+    .navbar-header
+      button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"
+        span.sr-only | Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      = link_to "sample app", root_path, id: "logo"
+    div id="navbar" class="navbar-collapse collapse"
+      ul class="nav navbar-nav navbar-right"
+        li = link_to "Home", root_path
+        li = link_to "Help", help_path
+        - if logged_in?
+          li = link_to "Users", users_path
+          li.dropdown
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Account <b class="caret"></b>
+            </a>
+            ul.dropdown-menu
+              li = link_to "Profile", current_user
+              li = link_to "Settings", edit_user_path(current_user)
+              li.divider
+              li = link_to "Log out", logout_path, method: "delete"
+        - else
+          li = link_to "Log in", login_path
