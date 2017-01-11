@@ -6,6 +6,7 @@ describe "User pages" do
 
     describe "profile page" do
         let(:user) { FactoryGirl.create(:user_with_microposts, microposts_count: 5) }
+        let(:other_user) { FactoryGirl.create(:user_with_microposts, microposts_count: 5) }
         before { visit user_path(user) }
         it { is_expected.to have_selector('h1', text: user.name) }
 
@@ -17,7 +18,15 @@ describe "User pages" do
                     expect(page).to have_link(href: micropost_path(mpost.id))
                 end
             end
+        end
 
+        describe "of another user" do
+            before do
+                log_in user
+                visit user_path(other_user)
+            end
+            it {is_expected.not_to have_selector('a', text: /delete/i) }
+            it {is_expected.to have_button("Follow") }
         end
     end
 
