@@ -1,13 +1,15 @@
 Feature: Logging in
+  As a visitor
+  I want to log in to my account
 
   Scenario: Unsuccessful login
-    Given a user visits the login page
-    When they submit invalid login information
-    Then they should see an error message
+    Given I visit the login page
+    When I submit invalid login information
+    Then I should see an error message
 
   Scenario: Successful login
-    Given a user visits the login page
-      And the user has an account
-    When the user submits valid login information
-    Then they should see their profile page
-      And they should see a log out link
+    Given I visit the login page
+      And I have an account
+    When I submit valid login information
+    Then I should see my profile page
+      And I should see a log out link

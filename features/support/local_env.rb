@@ -11,9 +11,11 @@ Cucumber::Rails::World.class_eval do
       cookies[:remember_token] = user.remember_token
     end
 
-    def create_user
+    def create_user(options = {})
+        name = options.has_key?(:name) ? options[:name] : "example"
+        email = options.has_key?(:email) ? options[:email] : "example@example.com"
         User.create(
-            name: "example", email: "example@example.com", 
+            name: name, email: email,
             password: "foobar", password_confirmation: "foobar",
             activated: true
         )
