@@ -10,6 +10,7 @@ Tests are implemented three different ways:
 - Minitest
 - Rspec, capybara, factory_girl
 - Cucumber, capybara
+
 There is considerable test overlap, and this is intentional.
 
 ##Slim
