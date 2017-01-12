@@ -42,6 +42,8 @@ group :test do
     gem 'guard-rspec'
     gem 'launchy'
     gem 'simplecov', :require => false
+    gem 'cucumber-rails', '1.4.5', :require => false
+    gem 'database_cleaner', '1.5.3'
 end
 
 group :production do
